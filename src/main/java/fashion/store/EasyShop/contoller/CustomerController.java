@@ -28,7 +28,10 @@ public class CustomerController {
 
     @GetMapping
     public List<CustomerDto> getCustomers()  {
-        return customerService.getCustomers();
+        return List.of(new CustomerDto("Mrdjen", "|Simo", "0206970850101",
+                "005030502", "PU ZR", "Zrenjanin NR1",
+                "dr@gmail.com", "0631030260"));
+       //return customerService.getCustomers();
     }
 
     @GetMapping(value = "/{id}" )
