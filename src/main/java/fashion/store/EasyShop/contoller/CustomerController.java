@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
-//addeed just comment
 
 @RequestMapping(value = "customers")
 @RestController
@@ -28,10 +26,7 @@ public class CustomerController {
 
     @GetMapping
     public List<CustomerDto> getCustomers()  {
-        return List.of(new CustomerDto("Mrdjen", "|Simo", "0206970850101",
-                "005030502", "PU ZR", "Zrenjanin NR1",
-                "dr@gmail.com", "0631030260"));
-       //return customerService.getCustomers();
+        return customerService.getCustomers();
     }
 
     @GetMapping(value = "/{id}" )
