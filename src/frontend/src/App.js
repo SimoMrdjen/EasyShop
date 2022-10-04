@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import {useState, useEffect} from 'react';
-import {getAllCustomers} from "./client";
-//import {successNotification, errorNotification} from "./Notification";
+import {getAllCustomers, deleteCustomer, editCustomer} from "./client";
+import {successNotification, errorNotification} from "./Notification";
 
 import {
     Layout,
@@ -22,47 +22,54 @@ import {
     LoadingOutlined,
     PlusOutlined
 } from '@ant-design/icons';
-//import StudentDrawerForm from "./StudentDrawerForm";
+import CustomerDrawerForm from "./CustomerDrawerForm";
 import './App.css';
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
+const removeCustomer = (customerId, callback) => {
+        deleteCustomer(customerId).
+        then(() => {successNotification("Customer deleted",
+            `Customer with ${customerId} was deleted `);
+            callback();
+            });
+    }
 const columns = fetchCustomers => [
     {
         title: 'Id',
         dataIndex: 'id',
         key: 'id',
-        width: 70
+        width: 50
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        width: 250
+        width: 150
     },
     {
         title: 'Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        width: 250
+        width: 150
     },
     {
         title: 'JMBG',
         dataIndex: 'jmbg',
         key: 'jmbg',
-        width: 150
+        width: 140
     },
     {
         title: 'Address',
         dataIndex: 'address',
         key: 'address',
-        width: 250
+        width: 150
     },
     {
         title: 'ID No',
         dataIndex: 'brLK',
         key: 'brLK',
-        width: 120
+        width: 90
     },
     {
         title: 'Issued by PD',
@@ -74,21 +81,43 @@ const columns = fetchCustomers => [
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
-        width: 250
+        width: 200
     },
     {
         title: 'Phone ',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-         width: 120
+        width: 120
+    },
+    {
+        title: 'Actions ',
+        dataIndex: 'actions',
+        render: (text, customer) =>
+            <Radio.Group>
+                <Popconfirm
+                    placement='topRight'
+                    title={`Are you sure to delete customer ${customer.firstName}`}
+                    onConfirm={() => removeCustomer(customer.id, fetchCustomers)}
+                    okText='Yes'
+                    cancelText='No'>
+                    <Radio.Button value="small">Delete</Radio.Button>
+                    </Popconfirm>
+                    <Radio.Button value="small">Edit</Radio.Button>
+                    <Radio.Button value="small">Make New Contract</Radio.Button>
+                    <Radio.Button value="small">Pay</Radio.Button>
+            </Radio.Group>
+         //width: 120
     }
+
 ];
 
 function App() {
 
     const[customers, setCustomers] = useState([]);
     const [fetching, setFetching] = useState(true);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
+    const [showDrawer, setShowDrawer] = useState(false);
+
 
     const fetchCustomers = () =>
         getAllCustomers().
@@ -110,6 +139,11 @@ function App() {
                 }
         if(customers.length <= 0){return <Empty/>}
         return <>
+                <CustomerDrawerForm
+                    showDrawer={showDrawer}
+                    setShowDrawer={setShowDrawer}
+                    fetchCustomers={fetchCustomers}
+                />
                 <Table
                                dataSource={customers}
                                columns={columns(fetchCustomers)}
@@ -120,7 +154,7 @@ function App() {
                                      <Badge count={customers.length} className="site-badge-count-4"/>
                                       <br/> <br/>
                                    <Button
-                                       //onClick={() => setShowDrawer(!showDrawer)}
+                                       onClick={() => setShowDrawer(!showDrawer)}
                                        type="primary" shape="round" icon={<PlusOutlined/>} size="small">
                                        Add New Customer
                                    </Button>
