@@ -103,7 +103,7 @@ const columns = fetchCustomers => [
                     <Radio.Button value="small">Delete</Radio.Button>
                     </Popconfirm>
                     <Radio.Button value="small">Edit</Radio.Button>
-                    <Radio.Button value="small">Make New Contract</Radio.Button>
+                    <Radio.Button value="small">New Contract</Radio.Button>
                     <Radio.Button value="small">Pay</Radio.Button>
             </Radio.Group>
          //width: 120
@@ -126,7 +126,11 @@ function App() {
                         console.log(data);
                         setCustomers(data);
                         setFetching(false);
-                    });
+                    }).catch(err => {
+                               err.response.json().then(res => {
+                               errorNotification( "There was an issue", `${res.message} [${res.status}] [${res.error}]`)
+                             });
+                         }).finally(() => setFetching(false));
 
     useEffect( () => {
         console.log("component is mounted");
@@ -137,15 +141,30 @@ function App() {
          if (fetching) {
                     return <Spin />
                 }
-        if(customers.length <= 0){return <Empty/>}
+        if(customers.length <= 0){
         return <>
                 <CustomerDrawerForm
                     showDrawer={showDrawer}
                     setShowDrawer={setShowDrawer}
                     fetchCustomers={fetchCustomers}
                 />
+                <Button
+                     onClick={() => setShowDrawer(!showDrawer)}
+                     type="primary" shape="round" icon={<PlusOutlined/>} size="small">
+                     Add New Customer
+                </Button>
+                <Empty/>
+                 </>
+                }
+        return <>
+                        <CustomerDrawerForm
+                            showDrawer={showDrawer}
+                            setShowDrawer={setShowDrawer}
+                            fetchCustomers={fetchCustomers}
+                        />
                 <Table
                                dataSource={customers}
+
                                columns={columns(fetchCustomers)}
                                bordered
                                title={() =>
@@ -153,18 +172,18 @@ function App() {
                                      <Tag>Number of customers</Tag>
                                      <Badge count={customers.length} className="site-badge-count-4"/>
                                       <br/> <br/>
-                                   <Button
-                                       onClick={() => setShowDrawer(!showDrawer)}
-                                       type="primary" shape="round" icon={<PlusOutlined/>} size="small">
-                                       Add New Customer
-                                   </Button>
+                                    <Button
+                                        onClick={() => setShowDrawer(!showDrawer)}
+                                        type="primary" shape="round" icon={<PlusOutlined/>} size="small">
+                                        Add New Customer
+                                    </Button>
                                </>
                                }
                                pagination={{pageSize: 10}}
                                scroll={{y: 600}}
                                rowKey={customer => customer.id}
                            />
-            </>
+                           </>
     }
 
        return <Layout style={{minHeight: '100vh'}}>

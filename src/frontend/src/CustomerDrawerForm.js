@@ -22,8 +22,18 @@ function CustomerDrawerForm({showDrawer, setShowDrawer, fetchCustomers}) {
                  successNotification("Customer successfully added", `${customer.firstName} was added`);
                  fetchCustomers();
             }).catch(err => {
-                console.log(err)
-            }).finally(() => {setSubmitting(false)})
+                               console.log(err)
+                               console.log(err);
+                               err.response.json().then(res => {
+                                   console.log(res);
+                                   errorNotification(
+                                       "There was an issue",
+                                       `${res.message} [${res.status}] [${res.error}]`,
+                                       "bottomLeft"
+                                   )
+                               });
+                           }).finally(() => {
+                               setSubmitting(false); })
            };
 
     const onFinishFailed = errorInfo => {

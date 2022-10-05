@@ -3,6 +3,7 @@ package fashion.store.EasyShop.dto;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import javax.validation.constraints.Email;
 @EqualsAndHashCode
 public class CustomerDto {
     private Long id;
+    @NotBlank
     private String lastName;
     private String firstName;
     @Length(max = 13, min = 13)

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping(value = "customers")
@@ -39,7 +41,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerDto addCustomer(@RequestBody CustomerDto customerDto) {
+    public CustomerDto addCustomer(@Valid @RequestBody CustomerDto customerDto) {
         return customerService.createCustomer(customerDto);
     }
 
