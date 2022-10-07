@@ -86,57 +86,60 @@
 		<!--		</dependency>-->
 	</dependencies>
 
-	<build>
-		<plugins>
-			<!--			Added from STUDENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-			<!--			<plugin>-->
-			<!--				<groupId>org.apache.maven.plugins</groupId>-->
-			<!--				<artifactId>maven-failsafe-plugin</artifactId>-->
-			<!--			</plugin>-->
+<!--	<build>-->
+<!--		<plugins>-->
+<!--			&lt;!&ndash;			Added from STUDENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!&ndash;&gt;-->
+<!--			&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--			&lt;!&ndash;				<groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
+<!--			&lt;!&ndash;				<artifactId>maven-failsafe-plugin</artifactId>&ndash;&gt;-->
+<!--			&lt;!&ndash;			</plugin>&ndash;&gt;-->
 
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<!--			dodato iz amigos projekta-->
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>2.5.2</version>
-				<configuration>
-					<from>
-						<image>openjdk:17</image>
-					</from>
-					<container>
-						<ports>
-							<port>8080</port>
-						</ports>
-						<format>OCI</format>
-					</container>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<excludes>-->
+<!--						<exclude>-->
+<!--							<groupId>org.projectlombok</groupId>-->
+<!--							<artifactId>lombok</artifactId>-->
+<!--						</exclude>-->
+<!--					</excludes>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+<!--			&lt;!&ndash;			dodato iz amigos projekta&ndash;&gt;-->
+<!--			<plugin>-->
+<!--				<groupId>com.google.cloud.tools</groupId>-->
+<!--				<artifactId>jib-maven-plugin</artifactId>-->
+<!--				<version>3.2.1</version>-->
+<!--				<configuration>-->
+<!--					<from>-->
+<!--						<image>openjdk:17</image>-->
+<!--					</from>-->
+<!--					<container>-->
+<!--						<ports>-->
+<!--							<port>8080</port>-->
+<!--						</ports>-->
+<!--						<format>OCI</format>-->
+<!--					</container>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+<!--		</plugins>-->
+<!--	</build>-->
+<!--	-->
 	<profiles>
 		<profile>
 			<id>jib-push-to-dockerhub</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+
+
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>com.google.cloud.tools</groupId>
 						<artifactId>jib-maven-plugin</artifactId>
-						<version>2.5.2</version>
+						<version>3.2.1</version>
 						<configuration>
 							<from>
 								<image>openjdk:17</image>
