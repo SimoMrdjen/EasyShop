@@ -195,7 +195,7 @@
 								<image>openjdk:17</image>
 							</from>
 							<container>
-<!--								<mainClass>fashion.store.EasyShop.EasyShopApplication</mainClass>-->
+								<mainClass>fashion.store.EasyShop.EasyShopApplication</mainClass>
 
 								<ports>
 									<port>8080</port>
