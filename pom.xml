@@ -16,7 +16,7 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<app.image.name>easy_shop</app.image.name>
+		<app.image.name>easy-shop</app.image.name>
 		<app.image.tag/>
 	</properties>
 
