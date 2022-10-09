@@ -2,15 +2,14 @@ package fashion.store.EasyShop.service.implementation;
 
 import fashion.store.EasyShop.dto.CustomerDto;
 import fashion.store.EasyShop.entity.Customer;
+import fashion.store.EasyShop.exception.BadRequestException;
 import fashion.store.EasyShop.mapper.CustomerMapper;
 import fashion.store.EasyShop.repository.CustomerRepository;
 import fashion.store.EasyShop.service.inter.ICustomerService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +50,10 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public CustomerDto createCustomer(CustomerDto customerDto) {
+       if (!customerRepository.findByJmbg(customerDto.getJmbg()).isEmpty())
+        {
+          throw new BadRequestException("Customer with same JMBG exists yet!!!!");
+        }
         Customer customer = customerRepository.save(customerMapper.mapCreateCustomerDtoToEntity(customerDto));
         return customerMapper.mapEntityToCustomerDto(customer);
     }

@@ -6,16 +6,16 @@ import fashion.store.EasyShop.mapper.CustomerMapper;
 import fashion.store.EasyShop.repository.CustomerRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -90,11 +90,12 @@ class CustomerServiceTest {
     }
 
     @Test
-    //@Disabled
-    void shouldCreateCustomer() {
+   // @Disabled
+    void shouldCreateCustomer() throws NotFoundException {
         when(customerMapper.mapEntityToCustomerDto(customer)).thenReturn(customerDto);
         when(customerMapper.mapCreateCustomerDtoToEntity(customerDtoIdNull)).thenReturn(customer);
         when(customerRepository.save(customer)).thenReturn(customer);
+        when(customerRepository.findByJmbg(customer.getJmbg())).thenReturn(Optional.empty());
         assertThat(customerService.createCustomer(customerDtoIdNull)).isEqualTo(customerDto);
     }
 

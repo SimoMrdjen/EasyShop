@@ -2,8 +2,6 @@ package fashion.store.EasyShop.repository;
 
 import fashion.store.EasyShop.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +12,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 //    List<Customer> findByLastNameLikeIgnoreCase(@Param("lastNameLike") String lastNameLike);
 
       List<Customer> findByLastNameContainingIgnoreCase(String lastNameLike);
+      Optional<Customer> findByJmbg(String jmbg);
 
 }
 
