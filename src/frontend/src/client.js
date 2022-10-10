@@ -22,7 +22,7 @@ export const getAllCustomers = () =>
             method: 'POST',
             body: JSON.stringify(customer)
             }
-         );
+         ).then(checkStatus);
 
  export const deleteCustomer = customerId =>
      fetch(`customers/${customerId}`, {method: 'DELETE'})
