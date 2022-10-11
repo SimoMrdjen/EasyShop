@@ -29,7 +29,7 @@ export const getAllCustomers = () =>
             .then(checkStatus);
 
  export const editCustomer = customer =>
-     fetch("customers", {
+     fetch(`customers/${customer.id}`, {
             headers: {
                 'Content-Type': 'application/json'
             },

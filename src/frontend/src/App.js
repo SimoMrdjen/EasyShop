@@ -23,6 +23,8 @@ import {
     PlusOutlined
 } from '@ant-design/icons';
 import CustomerDrawerForm from "./CustomerDrawerForm";
+import CustomerEditorForm from "./CustomerEditorForm";
+
 import './App.css';
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -34,6 +36,8 @@ const removeCustomer = (customerId, callback) => {
             callback();
             });
     }
+
+function App() {
 const columns = fetchCustomers => [
     {
         title: 'Id',
@@ -101,8 +105,15 @@ const columns = fetchCustomers => [
                     okText='Yes'
                     cancelText='No'>
                     <Radio.Button value="small">Delete</Radio.Button>
-                    </Popconfirm>
+            </Popconfirm>
+            <Popconfirm
+                    placement='topRight'
+                    title={`Are you sure to edit customer ${customer.firstName}`}
+                    onConfirm={() => setShowEditor(!showEditor)}
+                    okText='Yes'
+                    cancelText='No'>
                     <Radio.Button value="small">Edit</Radio.Button>
+           </Popconfirm>
                     <Radio.Button value="small">New Contract</Radio.Button>
                     <Radio.Button value="small">Pay</Radio.Button>
             </Radio.Group>
@@ -111,13 +122,13 @@ const columns = fetchCustomers => [
 
 ];
 
-function App() {
+//function App() {
 
     const[customers, setCustomers] = useState([]);
     const [fetching, setFetching] = useState(true);
     const [collapsed, setCollapsed] = useState(true);
     const [showDrawer, setShowDrawer] = useState(false);
-
+    const [showEditor, setShowEditor] = useState(false);
 
     const fetchCustomers = () =>
         getAllCustomers().
@@ -162,7 +173,12 @@ function App() {
                             setShowDrawer={setShowDrawer}
                             fetchCustomers={fetchCustomers}
                         />
-                <Table
+                        <CustomerEditorForm
+                            showDrawer={showEditor}
+                            setShowDrawer={setShowEditor}
+                            fetchCustomers={fetchCustomers}
+                        />
+                          <Table
                                dataSource={customers}
 
                                columns={columns(fetchCustomers)}
