@@ -14,6 +14,14 @@ export const getAllCustomers = () =>
     fetch("customers") //ovo je url API-a, prvi deo je definisan u proxy-u
         .then(checkStatus);
 
+export const getCustomer = (id) =>
+    fetch("customers/${id}") //ovo je url API-a, prvi deo je definisan u proxy-u
+        .then(checkStatus);
+
+export const getCustomersLike = (value) =>
+    fetch(`customers/like?lastNameLike=${value}`) //ovo je url API-a, prvi deo je definisan u proxy-u
+        .then(checkStatus);
+
  export const addNewCustomer = customer =>
      fetch("customers", {
             headers: {
@@ -28,7 +36,7 @@ export const getAllCustomers = () =>
      fetch(`customers/${customerId}`, {method: 'DELETE'})
             .then(checkStatus);
 
- export const editCustomer = customer =>
+export const editCustomer = customer =>
      fetch(`customers/${customer.id}`, {
             headers: {
                 'Content-Type': 'application/json'

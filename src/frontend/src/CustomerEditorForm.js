@@ -7,37 +7,39 @@ import {successNotification, errorNotification} from './Notification.js';
 const {Option} = Select;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-const formatNumber = (value) => new Intl.NumberFormat().format(value);
 
-
-function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
-    const onCLose = () => setShowDrawer(false);
+function CustomerEditorForm({showEditor, setShowEditor, fetchCustomers, customer}) {
+    const onCLose = () => setShowEditor(false);
     const [submitting, setSubmitting] = useState(false);
-    const [value, setValue] = useState('');
+//    const customer = fetchCustomer;
 
-    const onFinish = customer => {
+    const onFinish = customerEdit => {
         setSubmitting(true)
         console.log(JSON.stringify(customer, null, 2))
-        editCustomer(customer)
-        .then( () => {
-                console.log("Customer edited");
-                 onCLose();
-                 successNotification("Customer successfully edited", `${customer.firstName} was edited`);
-                 fetchCustomers();
+        editCustomer(customerEdit)
+            .then(() => {
+                console.log("Customer Edited")
+                onCLose();
+                successNotification(
+                    "Customer successfully edited",
+                    `${customerEdit.firstName} was edited`
+                    )
+                fetchCustomers();
             }).catch(err => {
-                               console.log(err)
-                               console.log(err);
-                               err.response.json().then(res => {
-                                   console.log(res);
-                                   errorNotification(
-                                       "There was an issue",
-                                       `${res.message} [${res.status}] [${res.error}]`,
-                                       "bottomLeft"
-                                   )
-                               });
-                           }).finally(() => {
-                               setSubmitting(false); })
-           };
+                console.log(err);
+                err.response.json().then(res => {
+                    console.log(res);
+                    errorNotification(
+                        "There was an issue",
+                        `${res.message} [${res.status}] [${res.error}]`,
+                        "bottomLeft"
+                    )
+                });
+            }).finally(() => {
+                setSubmitting(false);
+            })
+    };
+
 
     const onFinishFailed = errorInfo => {
         alert(JSON.stringify(errorInfo, null, 2));
@@ -47,7 +49,7 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
         title="Edit customer"
         width={720}
         onClose={onCLose}
-        visible={showDrawer}
+        visible={showEditor}
         bodyStyle={{paddingBottom: 80}}
         footer={
             <div
@@ -67,32 +69,31 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
               hideRequiredMark>
 
             <Row gutter={16}>
-               <Col span={12}>
+                <Col span={12}>
                     <Form.Item
                         name="id"
                         label="Id"
-//                        value=customer.id
-                        rules={[{required: false, message: 'Id'}]}
+                        rules={[{required: true}]}
                     >
-                    <Input type="number"    />
+                        <Input />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
                     <Form.Item
                         name="lastName"
                         label="Last Name"
-                        rules={[{required: true, message: 'Please enter customer last name'}]}
+                        rules={[{required: true, message: 'Please edit customer last name'}]}
                     >
-                        <Input placeholder="Please enter customer last name"/>
+                        <Input  placeholder= "{customer.lastName}"/>
                     </Form.Item>
                 </Col>
                 <Col span={12}>
                     <Form.Item
                         name="firstName"
                         label="First Name"
-                        rules={[{required: true, message: 'Please enter customer first name'}]}
+                        rules={[{required: true, message: 'Please edit customer first name'}]}
                     >
-                        <Input placeholder="Please enter customer first name"/>
+                        <Input placeholder="Please edit customer first name"/>
                     </Form.Item>
                 </Col>
             </Row>
@@ -102,9 +103,9 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
                     <Form.Item
                         name="jmbg"
                         label="JMBG"
-                        rules={[{required: true, message: 'Please enter customer JMBG'}]}
+                        rules={[{required: true, message: 'Please edit customer JMBG'}]}
                     >
-                         <Input placeholder="Please enter customer JMBG"/>
+                         <Input placeholder="Please edit customer JMBG"/>
 
                     </Form.Item>
                 </Col>
@@ -115,9 +116,9 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
                     <Form.Item
                             name="address"
                             label="Address"
-                            rules={[{required: true, message: 'Please enter customer address'}]}
+                            rules={[{required: true, message: 'Please edit customer address'}]}
                         >
-                      <Input placeholder="Please enter customer address"/>
+                      <Input placeholder="Please edit customer address"/>
                     </Form.Item>
                  </Col>
             </Row>
@@ -127,18 +128,18 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
                     <Form.Item
                             name="brLK"
                             label="ID Card No"
-                            rules={[{required: true, message: 'Please enter ID card number'}]}
+                            rules={[{required: true, message: 'Please edit ID card number'}]}
                         >
-                      <Input placeholder="Please enter ID card number"/>
+                      <Input placeholder="Please edit ID card number"/>
                     </Form.Item>
                  </Col>
                 <Col span={16}>
                     <Form.Item
                             name="pu"
                             label="ID Card Issued By"
-                            rules={[{required: true, message: 'Please enter which police department issued the ID card'}]}
+                            rules={[{required: true, message: 'Please edit which police department issued the ID card'}]}
                         >
-                      <Input placeholder="Please enter which police department issued the ID card"/>
+                      <Input placeholder="Please edit which police department issued the ID card"/>
                     </Form.Item>
                  </Col>
             </Row>
@@ -147,9 +148,9 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
                     <Form.Item
                             name="email"
                             label="Email"
-                            rules={[{required: false, message: 'Please enter customer email'}]}
+                            rules={[{required: false, message: 'Please edit customer email'}]}
                         >
-                      <Input placeholder="Please enter customer email"/>
+                      <Input placeholder="Please edit customer email"/>
                     </Form.Item>
                  </Col>
             </Row>
@@ -158,9 +159,9 @@ function CustomerEditorForm({showDrawer, setShowDrawer, fetchCustomers}) {
                     <Form.Item
                             name="phoneNumber"
                             label="Phone"
-                            rules={[{required: false, message: 'Please enter customer phone'}]}
+                            rules={[{required: false, message: 'Please edit customer phone'}]}
                         >
-                      <Input placeholder="Please enter customer phone"/>
+                      <Input placeholder="Please edit customer phone"/>
                     </Form.Item>
                  </Col>
             </Row>

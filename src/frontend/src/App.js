@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import {useState, useEffect} from 'react';
-import {getAllCustomers, deleteCustomer, editCustomer} from "./client";
+import {getAllCustomers, deleteCustomer, editCustomer,getCustomersLike} from "./client";
 import {successNotification, errorNotification} from "./Notification";
 
 import {
@@ -10,7 +10,7 @@ import {
     Table,
     Spin,
     Empty,
-    Button,Tag, Badge, Popconfirm, Radio, Image
+    Button,Tag, Badge, Popconfirm, Radio, Image,AutoComplete, Input,Space
 } from 'antd';
 
 import {
@@ -24,21 +24,46 @@ import {
 } from '@ant-design/icons';
 import CustomerDrawerForm from "./CustomerDrawerForm";
 import CustomerEditorForm from "./CustomerEditorForm";
-
 import './App.css';
 
+const { Search } = Input;
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
+//const {upEditor} = upEditor;
+
 const removeCustomer = (customerId, callback) => {
-        deleteCustomer(customerId).
-        then(() => {successNotification("Customer deleted",
-            `Customer with ${customerId} was deleted `);
-            callback();
-            });
-    }
+    deleteCustomer(customerId).then(() => {
+        successNotification("Customer deleted", `Customer with ${customerId} was deleted`);
+        callback();
+    }).catch(err => {
+        err.response.json().then(res => {
+            console.log(res);
+            errorNotification(
+                "There was an issue",
+                `${res.message} [${res.status}] [${res.error}]`
+            )
+        });
+    })
+};
+const onSearch = (value) => {
+    console.log(value);
+    getCustomersLike(value);
+  };
+
+// const onSearch = (value) => {
+//     console.log('onSelect', value);
+//   };
 
 function App() {
-const columns = fetchCustomers => [
+
+    const[customers, setCustomers] = useState([]);
+    const [fetching, setFetching] = useState(true);
+    const [collapsed, setCollapsed] = useState(true);
+    const [showDrawer, setShowDrawer] = useState(false);
+    const [showEditor, setShowEditor] = useState(false);
+    const[customer, setCustomer] = useState();
+
+    const columns = fetchCustomers => [
     {
         title: 'Id',
         dataIndex: 'id',
@@ -101,15 +126,18 @@ const columns = fetchCustomers => [
                 <Popconfirm
                     placement='topRight'
                     title={`Are you sure to delete customer ${customer.firstName}`}
-                    onConfirm={() => removeCustomer(customer.id, fetchCustomers)}
+                    onConfirm={() => { removeCustomer(customer.id, fetchCustomers)}}
                     okText='Yes'
                     cancelText='No'>
                     <Radio.Button value="small">Delete</Radio.Button>
-            </Popconfirm>
+                </Popconfirm>
             <Popconfirm
                     placement='topRight'
                     title={`Are you sure to edit customer ${customer.firstName}`}
-                    onConfirm={() => setShowEditor(!showEditor)}
+                    onConfirm={(data) => {setShowEditor(!showEditor);
+//                                           setCustomer(data);
+                    }}
+                    //add method to fetch customer
                     okText='Yes'
                     cancelText='No'>
                     <Radio.Button value="small">Edit</Radio.Button>
@@ -122,16 +150,21 @@ const columns = fetchCustomers => [
 
 ];
 
-//function App() {
-
-    const[customers, setCustomers] = useState([]);
-    const [fetching, setFetching] = useState(true);
-    const [collapsed, setCollapsed] = useState(true);
-    const [showDrawer, setShowDrawer] = useState(false);
-    const [showEditor, setShowEditor] = useState(false);
-
     const fetchCustomers = () =>
         getAllCustomers().
+            then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        setCustomers(data);
+                        setFetching(false);
+                    }).catch(err => {
+                               err.response.json().then(res => {
+                               errorNotification( "There was an issue", `${res.message} [${res.status}] [${res.error}]`)
+                             });
+                         }).finally(() => setFetching(false));
+
+    const fetchCustomersLike = (value) =>
+        getCustomersLike(value).
             then(res => res.json())
                     .then(data => {
                         console.log(data);
@@ -154,11 +187,12 @@ const columns = fetchCustomers => [
                 }
         if(customers.length <= 0){
         return <>
-                <CustomerDrawerForm
-                    showDrawer={showDrawer}
-                    setShowDrawer={setShowDrawer}
-                    fetchCustomers={fetchCustomers}
-                />
+                 <CustomerDrawerForm
+                      showDrawer={showDrawer}
+                      setShowDrawer={setShowDrawer}
+                      fetchCustomers={fetchCustomers}
+                 />
+
                 <Button
                      onClick={() => setShowDrawer(!showDrawer)}
                      type="primary" shape="round" icon={<PlusOutlined/>} size="small">
@@ -173,12 +207,13 @@ const columns = fetchCustomers => [
                             setShowDrawer={setShowDrawer}
                             fetchCustomers={fetchCustomers}
                         />
-                        <CustomerEditorForm
-                            showDrawer={showEditor}
-                            setShowDrawer={setShowEditor}
-                            fetchCustomers={fetchCustomers}
-                        />
-                          <Table
+                      <CustomerEditorForm
+                               showEditor={showEditor}
+                               setShowEditor={setShowEditor}
+                               fetchCustomers={fetchCustomers}
+                               customer={customer}
+                    />
+                <Table
                                dataSource={customers}
 
                                columns={columns(fetchCustomers)}
@@ -234,7 +269,17 @@ const columns = fetchCustomers => [
                <Header className="site-layout-background" style={{padding: 0}}/>
                <Content style={{margin: '0 16px'}}>
                    <Breadcrumb style={{margin: '16px 0'}}>
-                       <Breadcrumb.Item>User</Breadcrumb.Item>
+                       <Breadcrumb.Item>
+                         <Space direction="vertical">
+                             <Search
+                                  placeholder="input search text"
+                                  allowClear
+                                  enterButton="Search"
+                                  size="large"
+                                 onSearch={fetchCustomersLike}
+                                />
+                          </Space>
+                       </Breadcrumb.Item>
                    </Breadcrumb>
                    <div className="site-layout-background" style={{padding: 24, minHeight: 360}}>
                         {renderCustomers()}
