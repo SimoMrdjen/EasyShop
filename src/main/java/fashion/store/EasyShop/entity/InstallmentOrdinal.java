@@ -1,6 +1,6 @@
 package fashion.store.EasyShop.entity;
 
-public enum RateOrdinal {
+public enum InstallmentOrdinal {
     FIRST,
     SECOND,
     THIRD

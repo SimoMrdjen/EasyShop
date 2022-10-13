@@ -18,13 +18,13 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "\"contract\"")
+@Table(name = "\"purchase_contract\"")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Contract {
+public class PurchaseContract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +43,5 @@ public class Contract {
     private Date contractDate;
 
     @ManyToOne
-    private List<Rate> rates;
+    private List<Installment> installments;
 }

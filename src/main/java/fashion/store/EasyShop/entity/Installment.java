@@ -18,27 +18,27 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "\"rate\"")
+@Table(name = "\"installment\"")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Rate {
+public class Installment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany
-    private Contract contract;
+    private PurchaseContract purchaseContract;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "rate_ordinal", nullable = false)
-    private RateOrdinal rateOrdinal;
+    @Column(name = "installment_ordinal", nullable = false)
+    private InstallmentOrdinal installmentOrdinal;
 
-    @Column(name = "rate_amount", nullable = false)
-    private Double rateAmount;
+    @Column(name = "installment_amount", nullable = false)
+    private Double installmentAmount;
 
     @Column(name = "maturity_date", nullable = false)
     private Date maturityDate;
