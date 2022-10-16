@@ -13,9 +13,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "\"installment\"")
@@ -30,7 +33,8 @@ public class Installment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name="purchaseContract_id", referencedColumnName = "id")
     private PurchaseContract purchaseContract;
 
     @Enumerated(EnumType.STRING)
