@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Data
 public class CustomerDto {
     private Long id;
     @NotBlank

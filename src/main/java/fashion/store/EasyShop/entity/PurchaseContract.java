@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -47,9 +47,24 @@ public class PurchaseContract {
     private Double participation;
 
     @Column(name = "contract_date", nullable = false)
-    private Date contractDate;
+    private LocalDate contractDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy="purchaseContract", cascade= ALL)
+    @OneToMany(mappedBy="purchaseContract", cascade= ALL, orphanRemoval = true)
     private List<Installment> installments;
+
+    public PurchaseContract(Customer customer,
+                            Double contractAmount,
+                            Double participation,
+                            LocalDate contractDate
+                           // List<Installment> installments
+    ) {
+        this.customer = customer;
+        this.contractAmount = contractAmount;
+        this.participation = participation;
+        this.contractDate = contractDate;
+       // this.installments = installments;
+    }
+
+
 }

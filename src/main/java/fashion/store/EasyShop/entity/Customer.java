@@ -48,7 +48,7 @@ public class Customer {
     private String phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "customer", cascade = ALL)
+    @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
     private List<PurchaseContract> purchaseContracts;
     public Customer(String lastName,
                     String firstName,
@@ -68,5 +68,28 @@ public class Customer {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.purchaseContracts = purchaseContracts;
+    }
+
+    public Customer(String lastName, String firstName, String jmbg, String address, String brLK, String pu, String email, String phoneNumber) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.jmbg = jmbg;
+        this.address = address;
+        this.brLK = brLK;
+        this.pu = pu;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Customer(Long id, String lastName, String firstName, String jmbg, String address, String brLK, String pu, String email, String phoneNumber) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.jmbg = jmbg;
+        this.address = address;
+        this.brLK = brLK;
+        this.pu = pu;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 }

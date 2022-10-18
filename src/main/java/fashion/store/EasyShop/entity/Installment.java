@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -27,6 +28,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@RequiredArgsConstructor
 public class Installment {
 
     @Id
@@ -45,16 +47,43 @@ public class Installment {
     private Double installmentAmount;
 
     @Column(name = "maturity_date", nullable = false)
-    private Date maturityDate;
+    private LocalDate maturityDate;
 
-    @Column(name = "paid_amount", nullable = false)
+    @Column(name = "paid_amount")
     private Double paidAmount;
 
     @Column(name = "payment_date")
-    private Date paymentDate;
+    private LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
 
+    public Installment(PurchaseContract purchaseContract,
+                       InstallmentOrdinal installmentOrdinal,
+                       Double installmentAmount,
+                       LocalDate maturityDate,
+                       Double paidAmount,
+                       LocalDate paymentDate,
+                       PaymentMethod paymentMethod) {
+        this.purchaseContract = purchaseContract;
+        this.installmentOrdinal = installmentOrdinal;
+        this.installmentAmount = installmentAmount;
+        this.maturityDate = maturityDate;
+        this.paidAmount = paidAmount;
+        this.paymentDate = paymentDate;
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Installment(PurchaseContract purchaseContract,
+                       InstallmentOrdinal installmentOrdinal,
+                       Double installmentAmount,
+                       LocalDate maturityDate
+                     ) {
+        this.purchaseContract = purchaseContract;
+        this.installmentOrdinal = installmentOrdinal;
+        this.installmentAmount = installmentAmount;
+        this.maturityDate = maturityDate;
+
+    }
 }
