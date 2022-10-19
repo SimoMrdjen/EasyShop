@@ -1,6 +1,8 @@
 package fashion.store.EasyShop.config;
 
 import fashion.store.EasyShop.mapper.CustomerMapper;
+import fashion.store.EasyShop.mapper.InstallmentMapper;
+import fashion.store.EasyShop.mapper.PurchaseContractMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,10 +13,15 @@ public class AppConfig {
         return new CustomerMapper();
     }
 
-//    @Bean
-//    public BadRequestException badRequestException() {
-//        return new BadRequestException(msg);
-//    }
+    @Bean
+    public PurchaseContractMapper purchaseContractMapper() {
+        return new PurchaseContractMapper();
+    }
+
+    @Bean
+    public InstallmentMapper installmentMapper() {
+        return new InstallmentMapper();
+    }
 
 
 }

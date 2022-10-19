@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -28,7 +27,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Installment {
 
     @Id
@@ -84,6 +83,5 @@ public class Installment {
         this.installmentOrdinal = installmentOrdinal;
         this.installmentAmount = installmentAmount;
         this.maturityDate = maturityDate;
-
     }
 }
