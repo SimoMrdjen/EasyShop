@@ -66,5 +66,11 @@ public class PurchaseContract {
        // this.installments = installments;
     }
 
-
+    public PurchaseContract(Long id, Customer customer, Double contractAmount, Double participation, LocalDate contractDate) {
+        this.id = id;
+        this.customer = customer;
+        this.contractAmount = contractAmount;
+        this.participation = participation;
+        this.contractDate = contractDate;
+    }
 }
