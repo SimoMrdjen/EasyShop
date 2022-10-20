@@ -66,7 +66,16 @@ class PurchaseContractMapperTest {
     }
 
     @Test
-    void mapCreateInstallmentDtoToEntity() {
+    void shouldReturnEntityWhenMapCreateInstallmentDtoToEntity() {
+        when(customerMapper.mapEditCustomerDtoToEntity(customerDto)).
+                thenReturn(customer);
+
+        entityTest = mapper.mapCreateInstallmentDtoToEntity(dto);
+        entity.setInstallments(null);
+        entityTest.setInstallments(null);
+
+        assertThat(entityTest).
+                isEqualTo(entity);
     }
 
     @Test
