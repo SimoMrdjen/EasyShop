@@ -24,27 +24,20 @@ class PurchaseContractMapperTest {
     PurchaseContractMapper mapper;
     PurchaseContract entity;
     PurchaseContractDto dto;
-    PurchaseContract entityTest;
-    PurchaseContractDto dtoTest;
     Customer customer;
     CustomerDto customerDto;
-
     @Mock
     CustomerMapper customerMapper;
-
-
+    
     @BeforeEach
     void setUp() {
         mapper = new PurchaseContractMapper(customerMapper);
         customer = new Customer(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
-
         customerDto = new CustomerDto(1L, "Mrdjen", "Simo", "0206970850101",
                 "Yr", "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
-
         entity = new PurchaseContract(1l, customer, 100.00, 50.00, LocalDate.now(),
                 new ArrayList<Installment>());
-
         dto = new PurchaseContractDto(1l, customerDto, 100.00, 50.00, LocalDate.now(),
                 new ArrayList<InstallmentDto>());
     }
@@ -53,14 +46,9 @@ class PurchaseContractMapperTest {
     void shouldReturnEntityWhenMapCreateDtoToEntity() {
         when(customerMapper.mapEditCustomerDtoToEntity(customerDto)).
                 thenReturn(customer);
-
-        entityTest = mapper.mapCreateDtoToEntity(dto);
         entity.setId(null);
         entity.setInstallments(null);
-        entityTest.setId(null);
-        entityTest.setInstallments(null);
-
-        assertThat(entityTest).
+        assertThat(mapper.mapCreateDtoToEntity(dto)).
                 isEqualTo(entity);
     }
 
@@ -68,12 +56,8 @@ class PurchaseContractMapperTest {
     void shouldReturnEntityWhenMapCreateInstallmentDtoToEntity() {
         when(customerMapper.mapEditCustomerDtoToEntity(customerDto)).
                 thenReturn(customer);
-
-        entityTest = mapper.mapCreateInstallmentDtoToEntity(dto);
         entity.setInstallments(null);
-        entityTest.setInstallments(null);
-
-        assertThat(entityTest).
+        assertThat( mapper.mapCreateInstallmentDtoToEntity(dto)).
                 isEqualTo(entity);
     }
 
