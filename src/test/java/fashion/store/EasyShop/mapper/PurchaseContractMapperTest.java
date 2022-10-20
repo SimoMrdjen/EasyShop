@@ -28,7 +28,7 @@ class PurchaseContractMapperTest {
     CustomerDto customerDto;
     @Mock
     CustomerMapper customerMapper;
-    
+
     @BeforeEach
     void setUp() {
         mapper = new PurchaseContractMapper(customerMapper);
