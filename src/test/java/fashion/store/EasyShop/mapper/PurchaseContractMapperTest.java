@@ -35,7 +35,6 @@ class PurchaseContractMapperTest {
 
     @BeforeEach
     void setUp() {
-        //customerMapper =new CustomerMapper();
         mapper = new PurchaseContractMapper(customerMapper);
         customer = new Customer(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
@@ -79,6 +78,10 @@ class PurchaseContractMapperTest {
     }
 
     @Test
-    void mapGetEntityToDto() {
+    void shouldReturnDtoWhenMapGetEntityToDto() {
+        when(customerMapper.mapEntityToCustomerDto(customer)).
+                thenReturn(customerDto);
+        assertThat(mapper.mapGetEntityToDto(entity)).
+                isEqualTo(dto);
     }
 }
