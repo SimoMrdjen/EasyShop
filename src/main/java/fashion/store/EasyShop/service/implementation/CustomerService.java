@@ -73,8 +73,5 @@ public class CustomerService implements ICustomerService {
             throw new NotFoundException(CUSTOMER_NOT_FOUND);
         }
         customerRepository.deleteById(id);
-
-//                ifPresentOrElse((customer) -> {customerRepository.deleteById(id);},
-//                        () -> {  new NotFoundException(CUSTOMER_NOT_FOUND);});
     }
 }

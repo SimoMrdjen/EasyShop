@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -34,8 +35,8 @@ public class Installment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="purchaseContract_id", referencedColumnName = "id")
+    @ManyToOne(fetch = LAZY, cascade = PERSIST)
+    @JoinColumn(name="purchase_contract_id", referencedColumnName = "id")
     private PurchaseContract purchaseContract;
 
     @Enumerated(EnumType.STRING)
