@@ -70,7 +70,8 @@ public class Customer {
         this.purchaseContracts = purchaseContracts;
     }
 
-    public Customer(String lastName, String firstName, String jmbg, String address, String brLK, String pu, String email, String phoneNumber) {
+    public Customer(String lastName, String firstName, String jmbg, String address,
+                    String brLK, String pu, String email, String phoneNumber) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.jmbg = jmbg;
@@ -81,7 +82,8 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer(Long id, String lastName, String firstName, String jmbg, String address, String brLK, String pu, String email, String phoneNumber) {
+    public Customer(Long id, String lastName, String firstName, String jmbg, String address,
+                    String brLK, String pu, String email, String phoneNumber) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;

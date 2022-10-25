@@ -31,6 +31,14 @@ public class InstallmentService implements IInstallmentService {
 
     @Override
     public InstallmentDto updateInstallment(InstallmentDto installmentDto) {
-        return null;
+
+        return installmentMapper.mapGetEntityToDto(
+                installmentRepository.save(installmentMapper.mapEditDtoToEntity(installmentDto)));
+    }
+
+    @Override
+    public InstallmentDto createInstallment(InstallmentDto installmentDto) {
+        return installmentMapper.mapGetEntityToDto(
+                installmentRepository.save(installmentMapper.mapCreateDtoToEntity(installmentDto)));
     }
 }

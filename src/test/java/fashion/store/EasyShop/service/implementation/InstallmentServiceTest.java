@@ -3,7 +3,11 @@ package fashion.store.EasyShop.service.implementation;
 import fashion.store.EasyShop.dto.CustomerDto;
 import fashion.store.EasyShop.dto.InstallmentDto;
 import fashion.store.EasyShop.dto.PurchaseContractDto;
-import fashion.store.EasyShop.entity.*;
+import fashion.store.EasyShop.entity.Customer;
+import fashion.store.EasyShop.entity.Installment;
+import fashion.store.EasyShop.entity.InstallmentOrdinal;
+import fashion.store.EasyShop.entity.PaymentMethod;
+import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.InstallmentMapper;
 import fashion.store.EasyShop.repository.InstallmentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +38,7 @@ class InstallmentServiceTest {
     PurchaseContract purchaseContract1;
     Customer customer;
     InstallmentDto dto;
+    InstallmentDto dtoUpdate;
     CustomerDto customerDto;
     PurchaseContractDto purchaseContractDto;
 
@@ -57,6 +61,8 @@ class InstallmentServiceTest {
                 new ArrayList<InstallmentDto>());
         dto = new InstallmentDto(1L,purchaseContractDto, InstallmentOrdinal.FIRST,
                 20.00, LocalDate.now().plusMonths(1),null,null,null);
+        dtoUpdate = new InstallmentDto(1L,purchaseContractDto, InstallmentOrdinal.FIRST,
+                1.00, LocalDate.now(),1.00, LocalDate.now(),PaymentMethod.CASH);
     }
 
    @Test
@@ -72,5 +78,23 @@ class InstallmentServiceTest {
 
     @Test
     void shouldReturnDtoWhenUpdateInstallment() {
+        when(repo.save(installment2)).
+                thenReturn(installment2);
+        when(mapper.mapGetEntityToDto(installment2)).
+                thenReturn(dtoUpdate);
+        when(mapper.mapEditDtoToEntity(dtoUpdate)).
+                thenReturn(installment2);
+        assertThat(service.updateInstallment(dtoUpdate)).isEqualTo(dtoUpdate);
+    }
+
+    @Test
+    void shouldReturnDtoWhenCreateInstallment() {
+        when(repo.save(installment)).
+                thenReturn(installment);
+        when(mapper.mapGetEntityToDto(installment)).
+                thenReturn(dto);
+        when(mapper.mapCreateDtoToEntity(dto)).
+                thenReturn(installment);
+        assertThat(service.createInstallment(dto)).isEqualTo(dto);
     }
 }

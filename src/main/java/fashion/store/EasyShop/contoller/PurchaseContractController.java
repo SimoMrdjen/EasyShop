@@ -1,15 +1,18 @@
 package fashion.store.EasyShop.contoller;
 
-import fashion.store.EasyShop.dto.CustomerDto;
 import fashion.store.EasyShop.dto.PurchaseContractDto;
-import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.service.implementation.PurchaseContractService;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,6 +47,7 @@ public class PurchaseContractController {
     @PostMapping
     public PurchaseContractDto createPurchaseContract(@Valid @RequestBody
                                                           PurchaseContractDto purchaseContractDto) {
+
         return service.createPurchaseContract(purchaseContractDto);
     }
 
