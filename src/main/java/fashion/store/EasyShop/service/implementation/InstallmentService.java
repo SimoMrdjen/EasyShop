@@ -22,12 +22,11 @@ public class InstallmentService implements IInstallmentService {
 
     @Override
     public List<InstallmentDto> getAllInstallmentsByCustomerId(Long customerId) {
-       return installmentRepository.findAllByPurchaseContract_Customer_Id(customerId).
+           return installmentRepository.findAllByPurchaseContract_Customer_Id(customerId).
                 stream().
-                filter(i -> Objects.nonNull(i.getPaidAmount())).
+                filter(i -> Objects.isNull(i.getPaidAmount())).
                 map(installmentMapper::mapGetEntityToDto).
                 collect(Collectors.toList());
-
     }
 
     @Override
