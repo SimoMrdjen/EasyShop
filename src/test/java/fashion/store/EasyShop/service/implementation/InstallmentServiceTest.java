@@ -59,17 +59,18 @@ class InstallmentServiceTest {
                 20.00, LocalDate.now().plusMonths(1),null,null,null);
     }
 
-    @Test
+   @Test
     void shouldReturnListDtosWhenGetAllInstallmentsByCustomerId() {
         when(repo.findAllByPurchaseContract_Customer_Id(1L)).
                 thenReturn(List.of(installment,installment2));
         when(mapper.mapGetEntityToDto(installment)).
                 thenReturn(dto);
+
         assertThat(service.getAllInstallmentsByCustomerId(1L)).
                 usingDefaultElementComparator().isEqualTo(List.of(dto));
     }
 
     @Test
-    void updateInstallment() {
+    void shouldReturnDtoWhenUpdateInstallment() {
     }
 }
