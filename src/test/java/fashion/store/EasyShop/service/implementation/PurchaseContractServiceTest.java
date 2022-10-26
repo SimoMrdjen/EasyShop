@@ -3,9 +3,11 @@ package fashion.store.EasyShop.service.implementation;
 import fashion.store.EasyShop.dto.CustomerDto;
 import fashion.store.EasyShop.dto.InstallmentDto;
 import fashion.store.EasyShop.dto.PurchaseContractDto;
-import fashion.store.EasyShop.entity.*;
+import fashion.store.EasyShop.entity.Customer;
+import fashion.store.EasyShop.entity.Installment;
+import fashion.store.EasyShop.entity.InstallmentOrdinal;
+import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.PurchaseContractMapper;
-import fashion.store.EasyShop.repository.InstallmentRepository;
 import fashion.store.EasyShop.repository.PurchaseContractRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +32,7 @@ class PurchaseContractServiceTest {
     @Mock
     PurchaseContractRepository purchaseContractRepository;
     @Mock
-    InstallmentRepository installmentRepository;
+    InstallmentService installmentService;
     @Mock
     PurchaseContractMapper mapper;
     PurchaseContractService service;
@@ -43,10 +47,9 @@ class PurchaseContractServiceTest {
     CustomerDto customerDto;
     PurchaseContractDto purchaseContractDto;
 
-
     @BeforeEach
     void setUp() {
-        service = new PurchaseContractService(purchaseContractRepository,installmentRepository,mapper);
+        service = new PurchaseContractService(purchaseContractRepository,installmentService,mapper);
         customer = new Customer(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
         customerDto = new CustomerDto(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
@@ -72,8 +75,6 @@ class PurchaseContractServiceTest {
 //                1.00, LocalDate.now(),1.00, LocalDate.now(),PaymentMethod.CASH);
         purchaseContract.getInstallments().add(installment);
         purchaseContractDto.setInstallments(List.of(installmentDto));
-
-
     }
 
     @Test
@@ -88,21 +89,41 @@ class PurchaseContractServiceTest {
         when(purchaseContractRepository.findByCustomerId(1L)).thenReturn(List.of(purchaseContract));
         when(mapper.mapGetEntityToDto(purchaseContract)).thenReturn(purchaseContractDto);
         assertThat(service.getPurchaseContractsOfCustomer(1L)).isEqualTo(List.of(purchaseContractDto));
-
-
     }
 
     @Test
     void shouldReturnDtosWhenGetPurchaseContract() throws NotFoundException {
-//        PurchaseContract purchaseContract =
-//                repository.findById(id).orElseThrow(() -> new NotFoundException(CONTRACT_NOT_FOUND));
-//        return mapper.mapGetEntityToDto(purchaseContract);
         when(purchaseContractRepository.findById(1L)).thenReturn(Optional.ofNullable(purchaseContract));
         when(mapper.mapGetEntityToDto(purchaseContract)).thenReturn(purchaseContractDto);
         assertThat(service.getPurchaseContract(1L)).isEqualTo(purchaseContractDto);
     }
+    @Test
+    void shouldThrowNotFoundExWhenGetPurchaseContractIfNotExist() throws NotFoundException {
+        when(purchaseContractRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThatExceptionOfType(NotFoundException.class).
+                isThrownBy(() -> {service.getPurchaseContract(anyLong());}).
+                withMessage("Contract not found");
+    }
 
     @Test
-    void createPurchaseContract() {
+    void shouldCreatePurchaseContract() {
+//        PurchaseContract purchaseContract = repository.save(mapper.mapCreateDtoToEntity(purchaseContractDto));
+//        List<Installment> installments = installmentService.createListOfInstallmentsForContract(purchaseContract);
+//        purchaseContract.setInstallments(installments);
+//        return mapper.mapGetEntityToDto(purchaseContract);
+        when(mapper.mapCreateDtoToEntity(purchaseContractDto)).thenReturn(purchaseContract);
+       // when(purchaseContractRepository.save(purchaseContract)).thenReturn(purchaseContract);
+        assertThat(mapper.mapCreateDtoToEntity(purchaseContractDto)).isEqualTo(purchaseContract);
+         when(purchaseContractRepository.save(purchaseContract)).thenReturn(purchaseContract);
+         assertThat(purchaseContractRepository.save(purchaseContract)).isEqualTo(purchaseContract);
+
+        PurchaseContractDto purchaseContractDtoTest = new PurchaseContractDto(1L,customerDto, 100.00, 50.00, LocalDate.now(),
+                List.of(installmentDto));
+        when(installmentService.createListOfInstallmentsForContract(purchaseContract)).thenReturn(List.of(installment));
+        assertThat(installmentService.createListOfInstallmentsForContract(purchaseContract)).isEqualTo(List.of(installment));
+
+        System.out.println(service.createPurchaseContract(purchaseContractDto));
+//        assertThat(service.createPurchaseContract(purchaseContractDto)).isEqualTo(purchaseContractDtoTest);
+
     }
 }

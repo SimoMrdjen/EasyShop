@@ -47,7 +47,7 @@ class InstallmentServiceTest {
         service = new InstallmentService(repo,mapper);
         customer = new Customer(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
-        purchaseContract = new PurchaseContract(1L, customer, 100.00, 50.00, LocalDate.now(),
+        purchaseContract = new PurchaseContract(1L, customer, 100.00, 40.00, LocalDate.now(),
                 new ArrayList<Installment>());
         purchaseContract1 = new PurchaseContract(2L, customer, 5.00, 2.00, LocalDate.now(),
                 new ArrayList<Installment>());
@@ -71,7 +71,6 @@ class InstallmentServiceTest {
                 thenReturn(List.of(installment,installment2));
         when(mapper.mapGetEntityToDto(installment)).
                 thenReturn(dto);
-
         assertThat(service.getAllInstallmentsByCustomerId(1L)).
                 usingDefaultElementComparator().isEqualTo(List.of(dto));
     }
@@ -97,4 +96,23 @@ class InstallmentServiceTest {
                 thenReturn(installment);
         assertThat(service.createInstallment(dto)).isEqualTo(dto);
     }
+
+    @Test
+    void createListOfInstallmentsForContract(){
+        Double installAmount =(purchaseContract.getContractAmount() - purchaseContract.getParticipation()) / 3 ;
+        List<Installment> installments = List.of(
+                new Installment(purchaseContract, InstallmentOrdinal.FIRST, installAmount, purchaseContract.getContractDate().plusMonths(1)),
+                new Installment(purchaseContract, InstallmentOrdinal.SECOND, installAmount, purchaseContract.getContractDate().plusMonths(2)),
+                new Installment(purchaseContract, InstallmentOrdinal.THIRD, installAmount, purchaseContract.getContractDate().plusMonths(3))
+        );
+        List<Installment> installmentsTest = List.of(
+                new Installment(purchaseContract, InstallmentOrdinal.FIRST, 20.00, purchaseContract.getContractDate().plusMonths(1)),
+                new Installment(purchaseContract, InstallmentOrdinal.SECOND, 20.00, purchaseContract.getContractDate().plusMonths(2)),
+                new Installment(purchaseContract, InstallmentOrdinal.THIRD, 20.00, purchaseContract.getContractDate().plusMonths(3))
+        );
+        when(repo.saveAll(installments)).thenReturn(installments);
+        service.createListOfInstallmentsForContract(purchaseContract).forEach(System.out::println);
+        assertThat(service.createListOfInstallmentsForContract(purchaseContract)).
+                usingElementComparatorIgnoringFields("id").isEqualTo(installmentsTest);
+   }
 }

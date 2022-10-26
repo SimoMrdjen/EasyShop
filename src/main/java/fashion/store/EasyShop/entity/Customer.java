@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
-
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -50,14 +48,8 @@ public class Customer {
     @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
     private List<PurchaseContract> purchaseContracts;
-    public Customer(String lastName,
-                    String firstName,
-                    String jmbg,
-                    String address,
-                    String brLK,
-                    String pu,
-                    String email,
-                    String phoneNumber,
+    public Customer(String lastName, String firstName, String jmbg, String address,
+                    String brLK, String pu, String email, String phoneNumber,
                     List<PurchaseContract> purchaseContracts) {
         this.lastName = lastName;
         this.firstName = firstName;

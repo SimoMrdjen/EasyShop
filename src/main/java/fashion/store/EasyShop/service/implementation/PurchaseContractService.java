@@ -2,10 +2,8 @@ package fashion.store.EasyShop.service.implementation;
 
 import fashion.store.EasyShop.dto.PurchaseContractDto;
 import fashion.store.EasyShop.entity.Installment;
-import fashion.store.EasyShop.entity.InstallmentOrdinal;
 import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.PurchaseContractMapper;
-import fashion.store.EasyShop.repository.InstallmentRepository;
 import fashion.store.EasyShop.repository.PurchaseContractRepository;
 import fashion.store.EasyShop.service.inter.IPurchaseContractService;
 import javassist.NotFoundException;
@@ -26,7 +24,7 @@ public class PurchaseContractService implements IPurchaseContractService {
     @Autowired
     private PurchaseContractRepository repository;
     @Autowired
-    private InstallmentRepository installmentRepository;
+    private InstallmentService installmentService;
     @Autowired
     private PurchaseContractMapper mapper;
     private final String CONTRACT_NOT_FOUND = "Contract not found";
@@ -51,14 +49,8 @@ public class PurchaseContractService implements IPurchaseContractService {
     @Override
     public PurchaseContractDto createPurchaseContract(PurchaseContractDto purchaseContractDto) {
         PurchaseContract purchaseContract = repository.save(mapper.mapCreateDtoToEntity(purchaseContractDto));
-        Double installAmount =(purchaseContract.getContractAmount() - purchaseContract.getParticipation()) / 3 ;
-        List<Installment> insts = List.of(
-                new Installment(purchaseContract, InstallmentOrdinal.FIRST, installAmount, purchaseContract.getContractDate().plusMonths(1)),
-                new Installment(purchaseContract, InstallmentOrdinal.SECOND, installAmount, purchaseContract.getContractDate().plusMonths(2)),
-                new Installment(purchaseContract, InstallmentOrdinal.THIRD, installAmount, purchaseContract.getContractDate().plusMonths(3))
-                );
-        insts = installmentRepository.saveAll(insts);
-        purchaseContract.setInstallments(insts);
+        List<Installment> installments = installmentService.createListOfInstallmentsForContract(purchaseContract);
+        purchaseContract.setInstallments(installments);
         return mapper.mapGetEntityToDto(purchaseContract);
     }
 }
