@@ -5,9 +5,8 @@ import fashion.store.EasyShop.entity.Installment;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @NoArgsConstructor
 @AllArgsConstructor
 public class InstallmentMapper {

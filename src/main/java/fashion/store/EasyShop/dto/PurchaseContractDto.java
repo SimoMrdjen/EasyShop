@@ -5,18 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -27,9 +25,9 @@ public class PurchaseContractDto {
     private Long id;
     @NotNull
     private CustomerDto customerDto;
-    @NotBlank
+    @NotNull
     private Double contractAmount;
-    @NotBlank
+    @NotNull
     private Double participation;
     @NotNull
     private LocalDate contractDate;

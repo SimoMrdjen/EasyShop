@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.LAZY;
 
 
@@ -37,7 +37,7 @@ public class PurchaseContract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY, cascade= PERSIST)
+    @ManyToOne(fetch = LAZY, cascade= MERGE)
     @JoinColumn(name="customer_id", referencedColumnName = "id")
     private Customer customer;
 

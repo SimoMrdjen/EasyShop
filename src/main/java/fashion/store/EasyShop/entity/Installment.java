@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,7 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -34,7 +35,7 @@ public class Installment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY, cascade = PERSIST)
+    @ManyToOne(fetch = LAZY, cascade = MERGE)
     @JoinColumn(name="purchase_contract_id", referencedColumnName = "id")
     private PurchaseContract purchaseContract;
 
