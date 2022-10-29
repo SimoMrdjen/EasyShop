@@ -1,7 +1,7 @@
 package fashion.store.EasyShop.service.implementation;
 
+import fashion.store.EasyShop.dto.InstallmentDto;
 import fashion.store.EasyShop.dto.PurchaseContractDto;
-import fashion.store.EasyShop.entity.Installment;
 import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.PurchaseContractMapper;
 import fashion.store.EasyShop.repository.PurchaseContractRepository;
@@ -49,8 +49,10 @@ public class PurchaseContractService implements IPurchaseContractService {
     @Override
     public PurchaseContractDto createPurchaseContract(PurchaseContractDto purchaseContractDto) {
         PurchaseContract purchaseContract = repository.save(mapper.mapCreateDtoToEntity(purchaseContractDto));
-        List<Installment> installments = installmentService.createListOfInstallmentsForContract(purchaseContract);
-        purchaseContract.setInstallments(installments);
-        return mapper.mapGetEntityToDto(purchaseContract);
+        List<InstallmentDto> installmentsDto = installmentService.createListOfInstallmentsForContract(purchaseContract);
+
+        PurchaseContractDto dto = mapper.mapGetEntityToDto(purchaseContract);
+        dto.setInstallments(installmentsDto);
+        return dto;
     }
 }

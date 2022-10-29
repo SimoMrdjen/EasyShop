@@ -65,7 +65,8 @@ class PurchaseContractMapperTest {
     void shouldReturnDtoWhenMapGetEntityToDto() {
         when(customerMapper.mapEntityToCustomerDto(customer)).
                 thenReturn(customerDto);
-        assertThat(mapper.mapGetEntityToDto(entity)).
-                isEqualTo(dto);
+        dto.setInstallments(null);
+        assertThat(mapper.mapGetEntityToDto(entity)).isEqualTo(dto);
+
     }
 }

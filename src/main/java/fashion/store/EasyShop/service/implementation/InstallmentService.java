@@ -47,13 +47,15 @@ public class InstallmentService implements IInstallmentService {
     }
 
     @Override
-    public List<Installment> createListOfInstallmentsForContract(PurchaseContract purchaseContract) {
+    public List<InstallmentDto> createListOfInstallmentsForContract(PurchaseContract purchaseContract) {
                 Double installAmount =(purchaseContract.getContractAmount() - purchaseContract.getParticipation()) / 3 ;
         List<Installment> installments = List.of(
                 new Installment(purchaseContract, InstallmentOrdinal.FIRST, installAmount, purchaseContract.getContractDate().plusMonths(1)),
                 new Installment(purchaseContract, InstallmentOrdinal.SECOND, installAmount, purchaseContract.getContractDate().plusMonths(2)),
                 new Installment(purchaseContract, InstallmentOrdinal.THIRD, installAmount, purchaseContract.getContractDate().plusMonths(3))
                 );
-        return installmentRepository.saveAll(installments);
+        return installmentRepository.saveAll(installments).
+                stream().map(installmentMapper::mapGetEntityToDto).
+                collect(Collectors.toList());
     }
 }

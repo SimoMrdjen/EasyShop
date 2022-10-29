@@ -1,14 +1,11 @@
 package fashion.store.EasyShop.mapper;
 
-import fashion.store.EasyShop.dto.InstallmentDto;
 import fashion.store.EasyShop.dto.PurchaseContractDto;
 import fashion.store.EasyShop.entity.PurchaseContract;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
@@ -42,8 +39,8 @@ public class PurchaseContractMapper {
                 customerMapper.mapEntityToCustomerDto(contract.getCustomer()),
                 contract.getContractAmount(),
                 contract.getParticipation(),
-                contract.getContractDate(),
-                new ArrayList<InstallmentDto>()
+                contract.getContractDate()
+//                new ArrayList<InstallmentDto>()
         );
     }
 }

@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,43 +37,26 @@ class PurchaseContractServiceTest {
     PurchaseContractService service;
 
     Installment installment;
-//    Installment installment2;
     PurchaseContract purchaseContract;
-//    PurchaseContract purchaseContract1;
     Customer customer;
     InstallmentDto installmentDto;
-//    InstallmentDto dtoUpdate;
     CustomerDto customerDto;
     PurchaseContractDto purchaseContractDto;
 
     @BeforeEach
     void setUp() {
-        service = new PurchaseContractService(purchaseContractRepository,installmentService,mapper);
+        service = new PurchaseContractService(purchaseContractRepository, installmentService, mapper);
         customer = new Customer(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
         customerDto = new CustomerDto(1L, "Mrdjen", "Simo", "0206970850101", "Yr",
                 "0205", "Zrenjanin PU", "dr.sizni@gmail.com", "0631030260");
-
-        purchaseContract = new PurchaseContract(1L, customer, 100.00, 50.00, LocalDate.now(),
-                new ArrayList<Installment>());
+        purchaseContract = new PurchaseContract(1L, customer, 100.00, 50.00, LocalDate.now());
         purchaseContractDto = new PurchaseContractDto(1L, customerDto, 100.00, 50.00, LocalDate.now(),
-               null);
-
-//        purchaseContract1 = new PurchaseContract(2L, customer, 5.00, 2.00, LocalDate.now(),
-//                new ArrayList<Installment>());
-        installment = new Installment(1L,purchaseContract, InstallmentOrdinal.FIRST,
-                20.00, LocalDate.now().plusMonths(1),null,null,null);
-//        installment2 = new Installment(2L,purchaseContract1, InstallmentOrdinal.FIRST,
-//                1.00, LocalDate.now(),2.00, LocalDate.now(), PaymentMethod.CASH);
-
-//        purchaseContractDto = new PurchaseContractDto(1L, customerDto, 100.00, 50.00, LocalDate.now(),
-//                new ArrayList<InstallmentDto>());
-        installmentDto = new InstallmentDto(1L,purchaseContractDto, InstallmentOrdinal.FIRST,
-                20.00, LocalDate.now().plusMonths(1),null,null,null);
-//        dtoUpdate = new InstallmentDto(1L,purchaseContractDto, InstallmentOrdinal.FIRST,
-//                1.00, LocalDate.now(),1.00, LocalDate.now(),PaymentMethod.CASH);
-        purchaseContract.getInstallments().add(installment);
-        purchaseContractDto.setInstallments(List.of(installmentDto));
+                null);
+        installment = new Installment(1L, purchaseContract, InstallmentOrdinal.FIRST,
+                20.00, LocalDate.now().plusMonths(1), null, null, null);
+        installmentDto = new InstallmentDto(1L, purchaseContractDto, InstallmentOrdinal.FIRST,
+                20.00, LocalDate.now().plusMonths(1), null, null, null);
     }
 
     @Test
@@ -106,24 +88,14 @@ class PurchaseContractServiceTest {
     }
 
     @Test
-    void shouldCreatePurchaseContract() {
-//        PurchaseContract purchaseContract = repository.save(mapper.mapCreateDtoToEntity(purchaseContractDto));
-//        List<Installment> installments = installmentService.createListOfInstallmentsForContract(purchaseContract);
-//        purchaseContract.setInstallments(installments);
-//        return mapper.mapGetEntityToDto(purchaseContract);
+    void shouldReturnDtoWhenGetCreatePurchaseContract() {
         when(mapper.mapCreateDtoToEntity(purchaseContractDto)).thenReturn(purchaseContract);
-       // when(purchaseContractRepository.save(purchaseContract)).thenReturn(purchaseContract);
-        assertThat(mapper.mapCreateDtoToEntity(purchaseContractDto)).isEqualTo(purchaseContract);
-         when(purchaseContractRepository.save(purchaseContract)).thenReturn(purchaseContract);
-         assertThat(purchaseContractRepository.save(purchaseContract)).isEqualTo(purchaseContract);
-
-        PurchaseContractDto purchaseContractDtoTest = new PurchaseContractDto(1L,customerDto, 100.00, 50.00, LocalDate.now(),
+        when(purchaseContractRepository.save(purchaseContract)).thenReturn(purchaseContract);
+        when(installmentService.createListOfInstallmentsForContract(purchaseContract)).thenReturn(List.of(installmentDto));
+        when(mapper.mapGetEntityToDto(purchaseContract)).thenReturn(purchaseContractDto);
+        PurchaseContractDto dto = new PurchaseContractDto(1L,customerDto,purchaseContract.getContractAmount(),
+                purchaseContractDto.getParticipation(), purchaseContractDto.getContractDate(),
                 List.of(installmentDto));
-        when(installmentService.createListOfInstallmentsForContract(purchaseContract)).thenReturn(List.of(installment));
-        assertThat(installmentService.createListOfInstallmentsForContract(purchaseContract)).isEqualTo(List.of(installment));
-
-        System.out.println(service.createPurchaseContract(purchaseContractDto));
-//        assertThat(service.createPurchaseContract(purchaseContractDto)).isEqualTo(purchaseContractDtoTest);
-
+        assertThat(service.createPurchaseContract(purchaseContractDto)).isEqualTo(dto);
     }
 }

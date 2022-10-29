@@ -47,7 +47,6 @@ public class PurchaseContractController {
     @PostMapping
     public PurchaseContractDto createPurchaseContract(@Valid @RequestBody
                                                           PurchaseContractDto purchaseContractDto) {
-
         return service.createPurchaseContract(purchaseContractDto);
     }
 
