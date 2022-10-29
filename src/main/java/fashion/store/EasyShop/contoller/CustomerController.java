@@ -48,7 +48,7 @@ public class CustomerController {
     @PutMapping(value = "/{id}")
     public CustomerDto updateCustomer(@RequestBody CustomerDto customerDto,
                                       @PathVariable(name = "id") Long id) throws NotFoundException {
-        return customerService.updateCustomer(customerDto);
+        return customerService.updateCustomer(customerDto,id);
     }
 
     @DeleteMapping(value = "/{id}")

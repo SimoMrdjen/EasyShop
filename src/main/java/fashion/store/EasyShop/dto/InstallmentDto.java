@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -24,22 +25,15 @@ import java.time.LocalDate;
 public class InstallmentDto {
 
     private Long id;
-
     @NotNull
     private PurchaseContractDto purchaseContractDto;
-
     @NotNull
     private InstallmentOrdinal installmentOrdinal;
-
     @NotNull
     private Double installmentAmount;
-
     @NotNull
     private LocalDate maturityDate;
-
     private Double paidAmount;
-
     private LocalDate paymentDate;
-
     private PaymentMethod paymentMethod;
 }

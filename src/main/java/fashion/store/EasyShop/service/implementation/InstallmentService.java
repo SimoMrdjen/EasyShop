@@ -7,6 +7,7 @@ import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.InstallmentMapper;
 import fashion.store.EasyShop.repository.InstallmentRepository;
 import fashion.store.EasyShop.service.inter.IInstallmentService;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class InstallmentService implements IInstallmentService {
     private InstallmentRepository installmentRepository;
     @Autowired
     InstallmentMapper installmentMapper;
+    private final String INSTALLMENT_NOT_FOUND = "Installment not found";
 
     @Override
     public List<InstallmentDto> getAllInstallmentsByCustomerId(Long customerId) {
@@ -34,10 +36,13 @@ public class InstallmentService implements IInstallmentService {
     }
 
     @Override
-    public InstallmentDto updateInstallment(InstallmentDto installmentDto) {
-
+    public InstallmentDto updateInstallment(InstallmentDto installmentDto, Long id) throws NotFoundException {
+        if (!installmentRepository.existsById(id)) {
+            throw new NotFoundException(INSTALLMENT_NOT_FOUND);
+        }
         return installmentMapper.mapGetEntityToDto(
                 installmentRepository.save(installmentMapper.mapEditDtoToEntity(installmentDto)));
+
     }
 
     @Override
@@ -57,5 +62,12 @@ public class InstallmentService implements IInstallmentService {
         return installmentRepository.saveAll(installments).
                 stream().map(installmentMapper::mapGetEntityToDto).
                 collect(Collectors.toList());
+    }
+
+    @Override
+    public InstallmentDto getInstallment(Long id) throws NotFoundException {
+        Installment installment =
+                installmentRepository.findById(id).orElseThrow(() -> new NotFoundException(INSTALLMENT_NOT_FOUND));
+        return installmentMapper.mapGetEntityToDto(installment);
     }
 }

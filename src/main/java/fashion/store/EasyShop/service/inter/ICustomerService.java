@@ -11,7 +11,7 @@ public interface ICustomerService {
     List<CustomerDto> getCustomers();
     List<CustomerDto> getCustomersLike(String lastNameLike);
     CustomerDto createCustomer(CustomerDto customerDto) throws BadRequestException;
-    CustomerDto updateCustomer(CustomerDto customerDto) throws NotFoundException;
+    CustomerDto updateCustomer(CustomerDto customerDto, Long id) throws NotFoundException;
     void deleteCustomer(Long id) throws NotFoundException;
 
 }

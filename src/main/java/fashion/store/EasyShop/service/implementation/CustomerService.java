@@ -59,8 +59,8 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public CustomerDto updateCustomer(CustomerDto customerDto) throws NotFoundException {
-        customerRepository.findById(customerDto.getId()).orElseThrow(
+    public CustomerDto updateCustomer(CustomerDto customerDto,Long id) throws NotFoundException {
+        customerRepository.findById(id).orElseThrow(
                               () -> new NotFoundException(CUSTOMER_NOT_FOUND));
 
         Customer customer = customerRepository.save(customerMapper.mapEditCustomerDtoToEntity(customerDto));

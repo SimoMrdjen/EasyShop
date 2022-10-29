@@ -10,6 +10,7 @@ import fashion.store.EasyShop.entity.PaymentMethod;
 import fashion.store.EasyShop.entity.PurchaseContract;
 import fashion.store.EasyShop.mapper.InstallmentMapper;
 import fashion.store.EasyShop.repository.InstallmentRepository;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,14 +80,23 @@ class InstallmentServiceTest {
     }
 
     @Test
-    void shouldReturnDtoWhenUpdateInstallment() {
+    void shouldReturnDtoWhenUpdateInstallment() throws NotFoundException {
+        when(repo.existsById(anyLong())).thenReturn(Boolean.TRUE);
         when(repo.save(installment2)).
                 thenReturn(installment2);
         when(mapper.mapGetEntityToDto(installment2)).
                 thenReturn(dtoUpdate);
         when(mapper.mapEditDtoToEntity(dtoUpdate)).
                 thenReturn(installment2);
-        assertThat(service.updateInstallment(dtoUpdate)).isEqualTo(dtoUpdate);
+        assertThat(service.updateInstallment(dtoUpdate, anyLong())).isEqualTo(dtoUpdate);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdateInstallmentIfNotExist(){
+        when(repo.existsById(anyLong())).thenReturn(Boolean.FALSE);
+        assertThatExceptionOfType(NotFoundException.class)
+                .isThrownBy(() -> { service.updateInstallment(dtoUpdate, anyLong()); })
+                .withMessage("Installment not found");
     }
 
     @Test
@@ -99,20 +112,41 @@ class InstallmentServiceTest {
 
     @Test
     void createListOfInstallmentsForContract(){
-        Double installAmount =(purchaseContract.getContractAmount() - purchaseContract.getParticipation()) / 3 ;
         List<Installment> installments = List.of(
-                new Installment(purchaseContract, InstallmentOrdinal.FIRST, installAmount, purchaseContract.getContractDate().plusMonths(1)),
-                new Installment(purchaseContract, InstallmentOrdinal.SECOND, installAmount, purchaseContract.getContractDate().plusMonths(2)),
-                new Installment(purchaseContract, InstallmentOrdinal.THIRD, installAmount, purchaseContract.getContractDate().plusMonths(3))
-        );
-        List<Installment> installmentsTest = List.of(
                 new Installment(purchaseContract, InstallmentOrdinal.FIRST, 20.00, purchaseContract.getContractDate().plusMonths(1)),
                 new Installment(purchaseContract, InstallmentOrdinal.SECOND, 20.00, purchaseContract.getContractDate().plusMonths(2)),
                 new Installment(purchaseContract, InstallmentOrdinal.THIRD, 20.00, purchaseContract.getContractDate().plusMonths(3))
         );
         when(repo.saveAll(installments)).thenReturn(installments);
-        service.createListOfInstallmentsForContract(purchaseContract).forEach(System.out::println);
+
+        List<InstallmentDto> installmentsDto = List.of(
+                new InstallmentDto(1L, purchaseContractDto, InstallmentOrdinal.FIRST, 20.00,
+                        purchaseContractDto.getContractDate().plusMonths(1),null, null, null),
+                new InstallmentDto(2L, purchaseContractDto, InstallmentOrdinal.SECOND, 20.00,
+                        purchaseContract.getContractDate().plusMonths(2), null, null, null),
+                new InstallmentDto(3L, purchaseContractDto, InstallmentOrdinal.THIRD, 20.00,
+                        purchaseContract.getContractDate().plusMonths(3), null, null, null)
+        );
+        when(mapper.mapGetEntityToDto(installments.get(0))).thenReturn(installmentsDto.get(0));
+        when(mapper.mapGetEntityToDto(installments.get(1))).thenReturn(installmentsDto.get(1));
+        when(mapper.mapGetEntityToDto(installments.get(2))).thenReturn(installmentsDto.get(2));
+
         assertThat(service.createListOfInstallmentsForContract(purchaseContract)).
-                usingElementComparatorIgnoringFields("id").isEqualTo(installmentsTest);
+                usingElementComparatorIgnoringFields("id").isEqualTo(installmentsDto);
    }
+
+   @Test
+    void shouldReturnDtoWhenGetInstallment() throws NotFoundException {
+        when(repo.findById(anyLong())).thenReturn(Optional.ofNullable(installment));
+        when(mapper.mapGetEntityToDto(installment)).thenReturn(dto);
+        assertThat(service.getInstallment(anyLong())).isEqualTo(dto);
+    }
+
+    @Test
+    void shouldThrowExcWhenGetInstallmentNotExist() throws NotFoundException {
+        when(repo.findById(anyLong())).thenReturn(Optional.empty());
+        assertThatExceptionOfType(NotFoundException.class)
+                .isThrownBy(() -> { service.getInstallment(anyLong()); })
+                .withMessage("Installment not found");
+    }
 }

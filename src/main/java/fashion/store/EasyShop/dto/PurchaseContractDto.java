@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -23,20 +25,14 @@ import java.util.List;
 public class PurchaseContractDto {
 
     private Long id;
-
     @NotNull
     private CustomerDto customerDto;
-
     @NotBlank
     private Double contractAmount;
-
     @NotBlank
     private Double participation;
-
     @NotNull
     private LocalDate contractDate;
-
-    //@NotNull
     private List<InstallmentDto> installments;
 
     public PurchaseContractDto(Long id, CustomerDto customer, Double contractAmount, Double participation, LocalDate contractDate) {
@@ -46,8 +42,4 @@ public class PurchaseContractDto {
         this.participation = participation;
         this.contractDate = contractDate;
     }
-
-//    public CustomerDto getCustomerDto() {
-//        return this.customer;
-//    }
 }

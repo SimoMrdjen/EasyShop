@@ -41,6 +41,4 @@ public class CustomerMapper {
                 customer.getEmail(),
                 customer.getPhoneNumber());
     }
-
-
 }

@@ -103,11 +103,12 @@ class CustomerServiceTest {
     //@Disabled
     void shouldUpdateCustomerWhenExist() throws NotFoundException {
         when(customerMapper.mapEditCustomerDtoToEntity(customerDto)).thenReturn(customer);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
         when(customerRepository.save(customer)).thenReturn( customer);
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+
         when(customerMapper.mapEntityToCustomerDto(customer)).thenReturn(customerDto);
 
-        assertThat(customerService.updateCustomer(customerDto)).isEqualTo(customerDto);
+        assertThat(customerService.updateCustomer(customerDto, anyLong())).isEqualTo(customerDto);
     }
 
     @Test
@@ -115,7 +116,7 @@ class CustomerServiceTest {
      void shouldThrowNotFoundExWhenUpdateCustomerIfNotExist() throws NotFoundException {
         when(customerRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThatExceptionOfType(NotFoundException.class).
-                isThrownBy(() -> {customerService.updateCustomer(customerDto);}).
+                isThrownBy(() -> {customerService.updateCustomer(customerDto,anyLong());}).
                 withMessage("Customer not found");
      }
 

@@ -8,9 +8,6 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-//    @Query("SELECT u FROM Customer u WHERE UPPER(u.last_name) LIKE CONCAT('%',UPPER(:lastNameLike),'%')")
-//    List<Customer> findByLastNameLikeIgnoreCase(@Param("lastNameLike") String lastNameLike);
-
       List<Customer> findByLastNameContainingIgnoreCase(String lastNameLike);
       Optional<Customer> findByJmbg(String jmbg);
 
