@@ -21,6 +21,7 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 
@@ -51,7 +52,7 @@ public class PurchaseContract {
     private LocalDate contractDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy="purchaseContract", cascade= ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="purchaseContract", cascade= ALL, fetch = EAGER)
     private List<Installment> installments;
 
     public PurchaseContract(Customer customer,
