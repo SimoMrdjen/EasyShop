@@ -1,0 +1,16 @@
+{
+  "customerDto":{
+    "id": 7,
+    "lastName": "Proba",
+    "firstName": "Simo",
+    "jmbg": "00106970850101",
+    "address": "Uroša Predića 35",
+    "brLK": "0503255",
+    "pu": "bfgffbfcvx",
+    "email": "dr.sizni@gmail.com",
+    "phoneNumber": "0631030260"
+  },
+  "contractAmount": 100.00,
+  "participation" : 40.00,
+  "contractDate": "2022-10-10"
+}
