@@ -103,7 +103,9 @@ function CustomerEditorForm({showEditor, setShowEditor, fetchCustomers, customer
                     <Form.Item
                         name="jmbg"
                         label="JMBG"
-                        rules={[{required: true, message: 'Please edit customer JMBG'}]}
+                        rules={[{required: true  ,message:"Please edit customer JMBG"}]}
+                       //value="Something"
+                       value="private"
                     >
                          <Input placeholder="Please edit customer JMBG"/>
 
