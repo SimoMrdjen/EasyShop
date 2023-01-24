@@ -1,6 +1,5 @@
 package fashion.store.EasyShop.dto;
 
-import fashion.store.EasyShop.entity.Role;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

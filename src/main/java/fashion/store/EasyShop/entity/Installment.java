@@ -2,9 +2,7 @@ package fashion.store.EasyShop.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +24,8 @@ import static javax.persistence.FetchType.LAZY;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+//@ToString
+//@EqualsAndHashCode
 //@RequiredArgsConstructor
 public class Installment {
 
