@@ -1,4 +1,4 @@
-package fashion.store.EasyShop.config;
+package fashion.store.EasyShop.security.config;
 
 import fashion.store.EasyShop.mapper.CustomerMapper;
 import fashion.store.EasyShop.mapper.InstallmentMapper;
